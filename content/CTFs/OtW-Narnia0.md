@@ -11,7 +11,7 @@ En los siguientes post les dejaré mi write up sobre los 4 primeros desafíos de
 
 Bien, cada rato cuenta con un binario SetUID y el código fuente en C (he dejado el código fuente de los binarios abajo), por lo que podemos tener una idea de como se compone el desafío
 
-Para resolver los desafíos hay que comprender cómo funciona el stack y los conceptos de [Buffers Overflows](../Exploiting/post1.md)
+Para resolver los desafíos hay que comprender cómo funciona el stack y los conceptos de [Buffers Overflows](../Exploiting/post1.html)
 
 ### Empezando(Desafío 0)
 
