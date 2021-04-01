@@ -4,7 +4,7 @@ layout: default
 
 ## OvertheWire: Narnia0
 ![Narnia](../../assets/images/Narnia0.png)
-
+`1-04-2021 3:15PM`
 Hola a todos!
 
 En los siguientes post les dejaré mi write up sobre los 4 primeros desafíos del reto [Narnia](https://overthewire.org/wargames/narnia/) de la plataforma OverTheWire
