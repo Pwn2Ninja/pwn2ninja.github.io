@@ -10,6 +10,12 @@ En el post anterior estuve explicando cómo resolver el desafío 0 del reto Narn
 
 En este post estaremos viendo como resolver el siguiente desafío
 
+### Empezando
+
+Lo primero será conectarnos por SSH a la máquina con las credenciales que nos dió el reto anterior para el usuario narnia1:
+
+`ssh narnia1@narnia.labs.overthewire.org -p 2226`
+
 Este desafío es un poco más complicado, aquí tenemos el código fuente del binario que se nos presenta:
 
 ```c
