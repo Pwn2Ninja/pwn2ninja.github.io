@@ -3,6 +3,8 @@ layout: default
 ---
 
 ## OverTheWire: Narnia2
+![Narnia2](../../assets/images/Narnia2.png)
+`7-4-2021 1:00AM`
 
 En este desafío entraremos en un binxp "real" con un payload extremadamente basico que llena ESP con NOPS(\x90), excepto por un shellcode al final, y luego sobrescribiendo la dirección ret para que sea el inicio de ESP.
 
